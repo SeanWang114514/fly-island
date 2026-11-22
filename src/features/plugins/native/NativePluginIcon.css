@@ -10,3 +10,12 @@
   border-radius: var(--radius-circle);
   corner-shape: round;
 }
+
+.native-plugin-icon--clock {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-white-a06));
+}
