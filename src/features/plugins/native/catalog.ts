@@ -3,7 +3,7 @@
 
 import marketPackageIds from "../../../../plugins/market-packages.json" with { type: "json" };
 
-export type NativePluginId = "dingtalk" | "feishu" | "wecom" | "telegram" | "cursor" | "kimiCode" | "codebuddy" | "antigravity" | "zcode" | "hermes" | "clockWeather" | "calendarMarks" | "battery";
+export type NativePluginId = "dingtalk" | "feishu" | "wecom" | "telegram" | "cursor" | "kimiCode" | "codebuddy" | "antigravity" | "zcode" | "hermes" | "clockWeather" | "calendarMarks" | "battery" | "centeredClock";
 
 /** Where an installed plugin shows up: the Messages page, the Agent page or the collapsed island. */
 export type NativePluginKind = "messages" | "agent" | "island";
@@ -57,6 +57,7 @@ export const NATIVE_PLUGINS: readonly NativePlugin[] = [
   { id: "calendarMarks", kind: "island", accent: "#f29389", authors: contributed("gyl-coding"), settings: null },
   { id: "clockWeather", kind: "island", accent: "#63b9b6", authors: OWN, settings: { placement: "standalone", category: "clockWeather" } },
   { id: "battery", kind: "island", accent: "#8fd9a8", authors: contributed("QXiaoLingShang"), settings: { placement: "standalone", category: "battery" } },
+  { id: "centeredClock", kind: "island", accent: "#8a79ff", authors: OWN, settings: { placement: "standalone" } },
 ];
 
 export const PACKAGED_MARKET_PLUGINS = [

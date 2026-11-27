@@ -1,3 +1,4 @@
+import { Clock3 } from "lucide-react";
 import batteryIcon from "../../../assets/plugins/battery.svg";
 import dingtalkIcon from "../../../assets/brands/dingtalk.svg";
 import feishuIcon from "../../../assets/brands/feishu.svg";
@@ -18,7 +19,7 @@ import type { MarketPluginId } from "./catalog";
 import "./NativePluginIcon.css";
 
 // Every market plugin has a full-colour app icon: the brand's own mark, or one drawn here (assets/plugins).
-const APP_ICONS: Readonly<Record<MarketPluginId, string>> = {
+const APP_ICONS: Readonly<Record<Exclude<MarketPluginId, "centeredClock">, string>> = {
   dingtalk: dingtalkIcon,
   feishu: feishuIcon,
   wecom: wecomIcon,
@@ -41,11 +42,13 @@ const APP_ICONS: Readonly<Record<MarketPluginId, string>> = {
 const ROUND_ICONS: ReadonlySet<MarketPluginId> = new Set(["telegram", "codebuddy", "antigravity"]);
 
 export function hasPluginAppIcon(id: string): id is MarketPluginId {
-  return Object.prototype.hasOwnProperty.call(APP_ICONS, id);
+  return id === "centeredClock" || Object.prototype.hasOwnProperty.call(APP_ICONS, id);
 }
 
 /** A plugin's square app tile, rounded like the WeChat and Agent icons. */
 export function NativePluginIcon({ id, size = 16, className = "" }: { id: MarketPluginId; size?: number; className?: string }) {
+  if (id === "centeredClock") return <span className={`native-plugin-icon native-plugin-icon--clock ${className}`.trim()}
+    style={{ width: size, height: size }} aria-hidden="true"><Clock3 size={size * 0.72} strokeWidth={1.5} /></span>;
   const round = ROUND_ICONS.has(id) ? " native-plugin-icon--round" : "";
   return <img className={`native-plugin-icon${round} ${className}`.trim()} src={APP_ICONS[id]} alt="" aria-hidden="true"
     data-plugin-icon={id} width={size} height={size} draggable={false} />;

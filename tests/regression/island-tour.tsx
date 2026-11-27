@@ -1,6 +1,7 @@
 // Run pnpm dev and open /tests/regression/island-tour.html for the island against a mock desktop.
 // ?media=playing|paused|nocover|long|nolyrics|none, ?lyrics=0, ?empty=1, ?lang=en, ?detached=1, ?capsule=1 and ?test=1 configure the tour.
 import { checkClockWeatherIsland, clockWeatherMock, collapsedBarOrder } from "./clockWeatherIsland";
+import { checkCenteredClockIsland } from "./centeredClockIsland";
 import { act, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { mockIPC, mockWindows } from "@tauri-apps/api/mocks";
@@ -193,7 +194,8 @@ if (query.has("shoulderSweep") || query.has("shapePerf")) {
     if (query.has("cycle")) await checkCollapsedItemSwitch(check, settle);
     const island = () => document.querySelector<HTMLElement>(".island")!;
     const panel = () => document.querySelector<HTMLElement>(".island__expanded")!;
-    if (query.has("clockWeather") || query.has("centeredClock")) await checkClockWeatherIsland(check, settle);
+    if (query.has("centeredClock")) checkCenteredClockIsland(check);
+    else if (query.has("clockWeather")) await checkClockWeatherIsland(check, settle);
     const collapsed = island().getBoundingClientRect();
     const collapsedRadius = Number.parseFloat(getComputedStyle(island()).borderBottomLeftRadius);
     const expectedHeight = customNotch ? 32 : 38;
@@ -203,7 +205,7 @@ if (query.has("shoulderSweep") || query.has("shapePerf")) {
     const bar = document.querySelector<HTMLElement>(".island__collapsed")!;
     if (customNotch) {
       const title = bar.querySelector<HTMLElement>(".island__agent-session, .island__active-task, .island__todo-count, .collapsed-lyric")!;
-      check((collapsed.width === 240 || query.has("clockWeather") && collapsed.width <= 480) && interaction.collapsedWidth === collapsed.width && interaction.collapsedHeight === expectedHeight &&
+      check((collapsed.width === 240 || (query.has("clockWeather") || query.has("centeredClock")) && collapsed.width <= 480) && interaction.collapsedWidth === collapsed.width && interaction.collapsedHeight === expectedHeight &&
         Math.abs(parseFloat(getComputedStyle(title).fontSize) - 13 * fontPercent / 100) < 0.01,
       "自定义刘海尺寸同时传给原生窗口，文字使用独立字号");
     }

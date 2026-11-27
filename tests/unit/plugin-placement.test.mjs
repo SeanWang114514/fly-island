@@ -21,7 +21,7 @@ test("built-in plugins go by their kind of feature", () => {
   assert.equal(page(placed, "clockWeather").category, "clockWeather");
   assert.equal(page(placed, "battery").category, "battery");
   assert.equal(page(placed, "calendarMarks"), undefined);
-  assert.deepEqual(standalonePages(placed).map((item) => item.id), ["clockWeather", "battery"]);
+  assert.deepEqual(standalonePages(placed).map((item) => item.id), ["clockWeather", "battery", "centeredClock"]);
 });
 
 test("packaged plugins get their own page or an Agent group", () => {

@@ -129,11 +129,13 @@ try {
     check(latestSettings.agentShowZcode && latestSettings.agentQuotaSources.includes("zcode"), "安装 Z Code 同时打开它的开关并勾上额度环");
     await act(async () => document.querySelector<HTMLButtonElement>(`button[aria-label='${market.uninstallNamed(market.items.zcode.name)}']`)!.click());
     await act(async () => document.querySelector<HTMLButtonElement>(`button[aria-label='${market.uninstallNamed(market.items.cursor.name)}']`)!.click());
+    const centeredName = market.items.centeredClock.name;
     const name = market.items.clockWeather.name;
     const weatherInstall = () => document.querySelector<HTMLButtonElement>(`button[aria-label='${market.installNamed(name)}']`)!;
     const weatherRemove = () => document.querySelector<HTMLButtonElement>(`button[aria-label='${market.uninstallNamed(name)}']`)!;
     const weatherSwitch = () => document.querySelector<HTMLInputElement>(`[role=switch][aria-label='${market.enableNamed(name)}']`);
     const weatherSidebar = () => document.querySelector("[data-category='clockWeather']");
+    const centeredSidebar = () => document.querySelector("[data-category='plugin:centeredClock']");
     check(!weatherSwitch() && !weatherSidebar(), "未安装的卡片没有开关和独立栏目");
     await act(async () => weatherInstall().click());
     const toggle = weatherSwitch()!;
@@ -163,6 +165,11 @@ try {
     check(!weatherSwitch(), "停用的插件仍可卸载");
     await act(async () => weatherInstall().click());
     check(weatherSwitch()?.checked && weatherSidebar(), "卸载再安装默认启用");
+    const centeredInstall = () => document.querySelector<HTMLButtonElement>(`button[aria-label='${market.installNamed(centeredName)}']`)!;
+    check(Boolean(centeredInstall()) && !centeredSidebar(), "居中时钟未安装时只有市场卡片");
+    await act(async () => centeredInstall().click());
+    check(Boolean(centeredSidebar()) && Boolean(document.querySelector(`button[aria-label='${market.openSettingsNamed(centeredName)}']`)),
+      "安装居中时钟后出现独立设置入口和打开设置操作");
 
     const fixture = document.getElementById("fixture")!;
     fixture.style.width = "168px";

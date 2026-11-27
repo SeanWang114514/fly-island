@@ -94,6 +94,10 @@ WebView2 localStorage 的 `fly-island-native-plugins` 记录安装的内置插�
 前端 `features/weather/storage.ts` 通过安全读写保存 WebView2 localStorage：`fly-island-clock-weather` 存两个显示开关和用户选择的城市名/经纬度，`fly-island-weather-cache` 存一条城市坐标、摄氏温度、WMO code、观测时间与获取时间（Unix 毫秒）。安装记录沿用 `fly-island-native-plugins` 的 `clockWeather` id；卸载保留城市、显示偏好和缓存；重装只打开两个显示开关。开关与城市更新各自从最新记录合并，搜索本身不写入城市。缓存超过三小时不显示。
 
 Rust `weather/` 只按显式城市搜索或已保存坐标请求 Open-Meteo；城市搜索结果质量不足时会向 `nominatim.openstreetmap.org` 补充一项。用户点击定位时才同时请求 Windows Geolocator 和 `ipwho.is` 的网络大致位置；Windows 坐标用 Nominatim 反向解析城市。坐标只发给这些地理编码/天气服务，不写应用数据文件、凭据或独立位置记录，也不在后台自动定位。前端订阅在关闭天气、关闭插件或卸载后停止刷新；同窗口共享请求和缓存。说明见 [时间与天气](../plugins/clock-weather.md)。
+
+## 居中时钟（2026-11-27）
+
+内置插件安装记录沿用 `fly-island-native-plugins` 的 `centeredClock` id。`fly-island-centered-clock` 保存 `{ showTime, showDate, showSeconds, showWeekday, hourCycle, dateFirst, dateFormat }`：默认仅显示 24 小时时间，日期格式默认 `YYYY-MM-DD`；读取时布尔值仅接受 `true` / `false`，`hourCycle` 仅接受 `12` / `24`，非空日期格式截断到 20 个字符。卸载或关闭插件均保留这些偏好，重装/重新开启立即恢复。收起态优先级继续保存在 `fly-island-settings.collapsedPriority`，其中 `centeredClock` 仅在插件开启显示时参与仲裁；高优先级的 Agent、歌词和待办会暂时覆盖它。居中时钟开启后会临时接管时间与天气插件的时间位，但天气和原设置仍保留。说明见 [居中时钟](../plugins/centered-clock.md)。
 护眼插件 `eye-care` 的非秘密配置复用 `plugins-state.json` 中对应插件的 settings（`period`、`rest-minutes`、`idle`、`allow-skip`、`pause-fullscreen`、`language`）。周期、剩余时间和本轮推迟标记仅在插件内存；重启 / 保存设置后从完整用眼周期开始。不保存输入记录，不新增文件或 localStorage key。
 
 护眼宿主休息窗口的显示器列表、首帧状态、重试和会话令牌只在内存；不新增持久化文件或 localStorage key。`_host-eye-care-windows` 是初始化时临时注入的能力标记，不持久化。
